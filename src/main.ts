@@ -6,16 +6,17 @@ const app = express();
 const client = new SteamUser;
 
 const USERNAME = "oagsaxf3";
-// const PASSWORD = "nzlm4xsh";
-const PASSWORD = "nzlm4xs";
+const PASSWORD = "nzlm4xsh";
 
 const SHARED_SECRET = "2DEBlBw2IKKIBJK4erlxXS5In5s=";
 
 app.get('/login', (req, res) => {
 
   client.logOn({
-    accountName: USERNAME,
-    password: PASSWORD,
+    // accountName: USERNAME,
+    // password: PASSWORD,
+    // rememberPassword: true,
+    loginKey: "TLsSmbVEczjV2CMbGtc"
   });
 
   client.on("loggedOn", () => {
@@ -25,13 +26,15 @@ app.get('/login', (req, res) => {
     })
   });
 
+  client.on("loginKey", (key) => {
+    console.log("loginKey: ", key);
+  });
+
   client.on("error", (err) => {
-    if (err.message === "InvalidPassword") {
-      res.json({
-        code: 0,
-        message: err.message
-      })
-    }
+    res.json({
+      code: 0,
+      message: err.message
+    })
     // console.log("err: ", err.name, err.message);
   });
 
